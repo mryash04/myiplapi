@@ -1,44 +1,27 @@
 const express = require("express");
 const app = express();
+const ipl = require("./iplData");
 const PORT = 8000;
+const router = require("./routers/ipl");
+
+console.log(router);
 
 app.use(express.json());
 
-const players = [
-    {
-        name : "Rohit",
-        age : 32,
-        captain : "Mumbai Indians",
-        won : 5
-    },
-    {
-        name : "Dhoni",
-        age : 39,
-        captain : "Chennai Supers Kings",
-        won : 3
-    },
-    {
-        name : "Karthik",
-        age : 38,
-        captain : "Kolkata Knight Riders", 
-        won : 2
-    },
-    {
-        name : "KL Rahul",
-        age : 31,
-        captain : "Punjab Kings",
-        won : 0
-    }
-];
+app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-    console.log(res.status(200));
-    res.status(200).send("This is from home side");
+// https://myapi.mryash04.repl.co/ipl
+
+app.use('/', function(req, res, next){
+    res.links({
+        next: 'http://demo.com?page=2',
+        middle: 'http://demo.com?page=4',
+        last: 'http://demo.com?page=6'
+    });
+    next();
 });
 
-app.get("/players", (req, res) => {
-    res.status(200).send(players);
-})
+app.use(router);
 
 app.listen(PORT, () => {
     console.log(`This is litening port ${PORT}`)
